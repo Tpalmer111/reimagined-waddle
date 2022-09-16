@@ -1,0 +1,17 @@
+
+<h2>Update your email and/or password</h2>
+
+<% if (message) { %>
+    <p><%= message %></p>
+<% } %>
+
+
+<form action="/users" method="POST">
+    <label for="email">Email:</label>
+    <input id="email" type="email" name="email" required>
+
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" required>
+
+    <button type="submit">Update user email and/or password</button>
+</form>

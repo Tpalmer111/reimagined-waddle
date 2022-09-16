@@ -49,4 +49,4 @@ app.get('/', (req, res) => {
 app.use('/users', require('./controllers/users'))
 
 // listen on a port
-app.listen(PORT, () => console.log(`you or your loved ones may be entitled to compensation on port: ${PORT}`))
+app.listen(PORT, () => console.log(`Rockin and Rollin on port: ${PORT}`))

@@ -10,7 +10,7 @@
     <nav>
         <ul>
             <!-- if the user is logged in... -->
-            <!-- all data in the res.locals is usuable in the layout -->
+            <!-- all data in the res.locals is usable in the layout -->
             <% if (user) { %>
                 <li>
                     <a href="/users/profile">Profile</a>
@@ -19,6 +19,15 @@
                 <li>
                     <a href="/users/logout">Logout</a>
                 </li>
+
+                <li>
+                    <a href="/profile/update">Logout</a>
+                </li>
+
+                <li>
+                    <a href="/profile/search">Logout</a>
+                </li>
+
             <% } else { %>
                 <li>
                     <a href="/users/new">Sign Up</a>
