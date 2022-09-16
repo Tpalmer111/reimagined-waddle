@@ -12,14 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       models.album.belongsTo(models.user)
-      models.album.belongsToMany(models.review)
+      models.album.hasMany(models.review)
     }
   }
   album.init({
     title: DataTypes.STRING,
     artist: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
-    reviewId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'album',
