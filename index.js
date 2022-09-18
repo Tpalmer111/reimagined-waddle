@@ -13,7 +13,7 @@ const app = express()
 const PORT = process.env.PORT || 3000
 app.set('view engine', 'ejs')
 app.use(ejsLayouts)
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true}))
 app.use(cookieParser())
 // our custom auth middleware
 app.use(async (req, res, next) => {
@@ -41,7 +41,7 @@ app.use(async (req, res, next) => {
 app.get('/', (req, res) => {
     // console.log('incoming cookie 🍪', req.cookies)
     // console.log(res.locals.myData)
-    console.log('the currently logged in user is:', res.locals.user)
+    console.warn('the currently logged in user is:', res.locals.user)
     res.render('home.ejs')
 })
 

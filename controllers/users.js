@@ -3,6 +3,9 @@ const router = express.Router()
 const db = require('../models')
 const crypto = require('crypto-js')
 const bcrypt = require('bcrypt')
+const axios = require('axios')
+
+//router.use(express.urlencoded({extended: false})) 
 
 // GET /users/new -- render a form to create a new user
 router.get('/new', (req, res) => {
@@ -11,7 +14,9 @@ router.get('/new', (req, res) => {
 
 // POST /users -- create a new user in the db
 router.post('/', async (req, res) => {
+    console.warn("test 2")
     try {
+
         // has the password from the req.body
         const hashedPassword = bcrypt.hashSync(req.body.password, 12)        
         // create a new user
@@ -97,24 +102,40 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/profile', (req, res) => {
+    console.log('test 1')
     // if the user is not logged ... we need to redirect to the login form
     if (!res.locals.user) {
         res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource.')
     // otherwise, show them their profile
     } else {
+        console.log("the current user is: " + res.locals.user)
         res.render('users/profile.ejs', {
             user: res.locals.user
         })
     }
 })
 
-router.get('/users/search', (req, res) => {
-    res.render('search.ejs')
+router.get('/search', (req, res) => {
+
+    axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.query.albumSearch}&api_key=${process.env.API_KEY}&format=json`) 
+        .then(response => {
+        // res.render('users/search.ejs', {albums: response.data.Search})
+        console.log(response.data.Search)
+    })
+    .catch(console.warn("server error is coming from inside the house..."))
 })
 
+// router.get('/albums/:id', (req, res) => {
+//     console.log(req.params.id)
+//     axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.params.id}&api_key=${process.env.API_KEY}&format=json`)
+//       .then(response => {
+//         res.render('detail.ejs', { album: response.data })
+//       })
+//       .catch(console.log)
+//   })
 
 router.get('/comment', (req, res) => {
-    res.render('comment.ejs')
+    res.render('users/comment.ejs')
 })
 
 router.get('/update', (req, res) => {
