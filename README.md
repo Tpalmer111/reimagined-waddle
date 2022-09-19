@@ -108,3 +108,17 @@ D    | DELETE | /albums/:id          | remove album from profile                
 ### inspiration and developer notes
 
 After a frustrating ordeal trying to decide on a project direction, I was procrastinating by clearing my email inbox. I came across an email from Discogs.com prompting me to review a seller from whom I had recently purchased a 7" record (flawed record but an otherwise satisfactory transaction). It then occurred to me they might have a public api. I guess sometimes, procrastination is the answer.
+
+
+
+
+
+<h1><%=  album.title %></h1>
+<p><%=  album.artist %></p>
+
+
+<form method="POST" action="/faves">
+    <input hidden value="<%= album.title %>" name="title">
+    <input hidden value="<%= album.artist %>" name="imdbid">
+    <button type="submit">Add this album to collection</button>
+</form>
