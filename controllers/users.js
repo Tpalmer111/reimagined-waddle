@@ -31,9 +31,9 @@ router.post('/', async (req, res) => {
         })
 
         // if the user was found...send them to the login form
-        console.log('created is:',  created)
+        // console.log('created is:',  created)
         if (!created) {
-            console.log('user exists already')
+            // console.log('user exists already')
             res.redirect('/users/login?message=Please log into your account to continue.')
         } else {
             // store that new user's id as a cookie in the browser
@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
 //http://127.0.0.1:3000/users/login?message=Incorrect%20username%20or%20password
 // GET /users/login -- show a login form to the user
 router.get('/login', (req, res) => {
-    console.log(req.query)
+    // console.log(req.query)
     res.render('users/login.ejs', {
         // if the req.query.message exists, pass it is as the message, otherwise pass in null
         // ternary operator
@@ -135,6 +135,20 @@ router.post('/albums', async (req, res) => {
             title: req.body.title,
             artist: req.body.artist,
             userId: res.locals.user.id
+        })
+        res.redirect('/users/albums')
+    }catch (err) {
+        console.log(err)
+        res.send('server error')
+    }
+})
+
+router.delete('/albums', async (req, res) => {
+    try {
+        await db.album.destroy({
+            where: {
+                id: req.params.body.id
+            }
         })
         res.redirect('/users/albums')
     }catch (err) {
