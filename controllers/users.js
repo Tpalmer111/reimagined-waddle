@@ -116,9 +116,7 @@ router.get('/profile', (req, res) => {
     res.render('users/profile.ejs')
 })
 router.get('/search', async (req, res) => {
-    // res.render('users/search.ejs')
-    const search = "pink floyd"
-    // req.query.albumSearch
+    const search = req.query.albumSearch
     const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${search}&api_key=${process.env.API_KEY}&format=json`);
     // console.log(response.data.results.albummatches)
     res.render('users/results.ejs', { albums: response.data.results.albummatches.album });
@@ -144,16 +142,16 @@ router.get('/search', async (req, res) => {
     }
   })
   
-//   router.post('/faves', async (req, res) => {
-//     try {
-//       console.log(req.body)
-//       await db.fave.create(req.body)
-//       res.redirect('/profile')
-//     }catch (err) {
-//       console.log(err)
-//       res.send('server error')
-//     }
-//   })
+  router.post('/albums', async (req, res) => {
+    try {
+      console.log(req.body)
+      await db.album.create(req.body)
+      res.redirect('/profile')
+    }catch (err) {
+      console.log(err)
+      res.send('server error')
+    }
+  })
 
 
 
