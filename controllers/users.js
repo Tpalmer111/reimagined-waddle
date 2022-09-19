@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const router = express.Router()
 const db = require('../models')
@@ -101,46 +102,161 @@ router.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
-router.get('/profile', (req, res) => {
-    console.log('test 1')
-    // if the user is not logged ... we need to redirect to the login form
-    if (!res.locals.user) {
-        res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource.')
-    // otherwise, show them their profile
-    } else {
-        console.log("the current user is: " + res.locals.user)
-        res.render('users/profile.ejs', {
-            user: res.locals.user
-        })
+
+
+router.get('/search', async (req, res) => {
+    const search = "pink floyd"
+    const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${search}&api_key=${process.env.API_KEY}&format=json`);
+    console.log(response.data.results.artistmatches)
+    res.render('users/results.ejs', { artists: response.data.results.artistmatches.artist });
+  })
+  
+  router.get('/albums/:id', async (req, res) => {
+    console.log(req.params.id)
+    const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.params.id}&api_key=${process.env.API_KEY}&format=json`);
+
+    res.render('users/albums.ejs', { album: response.data })
+  })
+  
+  router.get('/profile', async (req, res) => {
+    try {
+      const allFaves = await db.album.findAll()
+      res.render('/users/profile.ejs', {allFaves})
+    } catch (err) {
+      console.log(err)
+      res.send('server error')
     }
-})
+  })
+  
+  router.post('/profile', async (req, res) => {
+    try {
+      console.log(req.body)
+      await db.fave.create(req.body)
+      res.redirect('/profile')
+    }catch (err) {
+      console.log(err)
+      res.send('server error')
+    }
+  })
 
-router.get('/search', (req, res) => {
+//   const fetchLastFm = async () => {
+//     try {
 
-    axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.query.albumSearch}&api_key=${process.env.API_KEY}&format=json`) 
-        .then(response => {
-        // res.render('users/search.ejs', {albums: response.data.Search})
-        console.log(response.data.Search)
-    })
-    .catch(console.warn("server error is coming from inside the house..."))
-})
+//         const API_KEY = '4f0e195af4564f92bf9a375a5dee07f6'
+//         const search = 'Johnny Cash'
 
-// router.get('/albums/:id', (req, res) => {
-//     console.log(req.params.id)
-//     axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.params.id}&api_key=${process.env.API_KEY}&format=json`)
+//         const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${search}&api_key=${API_KEY}&format=json`)
+//         console.log(response.data.results.artistmatches)
+
+//     } catch(err) {
+//         console.log(err)
+//     }
+// }
+
+// fetchLastFm()
+
+
+
+
+
+
+
+
+
+
+
+
+
+// router.get('/profile', (req, res) => {
+//     console.log('test 1')
+//     // if the user is not logged ... we need to redirect to the login form
+//     if (!res.locals.user) {
+//         res.redirect('/users/login?message=You must authenticate before you are authorized to view this resource.')
+//     // otherwise, show them their profile
+//     } else {
+//         console.log("the current user is: " + res.locals.user)
+//         res.render('users/profile.ejs', {
+//             user: res.locals.user
+//         })
+//     }
+// })
+
+
+// router.get("/search", async (req, res) => {
+//         try {
+//             const search = 'Johnny Cash'
+//             const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${search}&api_key=${process.env.API_KEY}&format=json`)
+//             console.log(response.data.results.artistmatches)
+//             // res.render('users/results.ejs', { albums: response.data.results.artistmatches}) 
+//         } catch(err) {
+//             console.log(err)
+//         }
+//     })
+
+
+
+// app.get('/results', (req, res) => {
+//     axios.get(`http://www.omdbapi.com/?s=${req.query.movieSearch}&apikey=${process.env.OMDB_API_KEY}`)
 //       .then(response => {
-//         res.render('detail.ejs', { album: response.data })
+//         res.render('results.ejs', { movies: response.data.Search })
+//       })
+//       .catch(console.log)
+//   })
+  
+//   app.get('/details/:id', (req, res) => {
+//     console.log(req.params.id)
+//     axios.get(`http://www.omdbapi.com/?i=${req.params.id}&apikey=${process.env.OMDB_API_KEY}`)
+//       .then(response => {
+//         res.render('detail.ejs', { movie: response.data })
 //       })
 //       .catch(console.log)
 //   })
 
-router.get('/comment', (req, res) => {
-    res.render('users/comment.ejs')
-})
 
-router.get('/update', (req, res) => {
-    res.render('users/update.ejs')
-})
+// router.get('/search', (req, res) => {
+//     const searchItem = 'murder_by_death'
+//     // console.log(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${searchItem}&api_key=${process.env.API_KEY}&format=json`, )
+//     axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${searchItem}&api_key=${process.env.API_KEY}&format=json`)
+//         .then(response => {
+//             console.log(response.data)
+//         })
+// })
+
+// router.get('/search', (req, res) => {
+//     console.log("Test 3")
+//     axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.query.albumSearch}&api_key=${process.env.API_KEY}&format=json`)
+//         .then(response => {
+//             res.render('users/search.ejs', {albums: response.data.Search})
+//         })
+//         .catch(console.log)
+// })
+
+// router.get('/search', (req, res) => {
+
+//     axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.query.albumSearch}&api_key=${process.env.API_KEY}&format=json`) 
+//         .then(response => {
+//         res.render('users/search.ejs', {albums: response.data.Search})
+//        // console.log(response.data)
+//     })
+//     .catch(console.log)
+// })
+
+// router.get('/albums/:id', (req, res) => {
+//     console.log(req.params.id)
+    // axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.params.id}&api_key=${process.env.API_KEY}&format=json`)
+    //   .then(response => {
+    //     res.render('detail.ejs', { album: response.data })
+    //   })
+    //   .catch(console.log)
+ // })
+
+// router.get('/comment', (req, res) => {
+//     res.render('users/comment.ejs')
+// })
+
+// router.get('/update', (req, res) => {
+//     res.render('users/update.ejs')
+// })
 
 // router.get('/albums/:id', (req, res) => {
 //     res.render('show album information: title, artist, etc.')
