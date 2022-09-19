@@ -143,7 +143,7 @@ router.post('/albums', async (req, res) => {
     }
 })
 
-router.delete('/albums', async (req, res) => {
+router.delete('/albums/:id', async (req, res) => {
     try {
         await db.album.destroy({
             where: {
