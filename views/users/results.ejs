@@ -2,7 +2,8 @@
 <% albums.forEach(album => { %>
     <div>
       <h3><%= album.name %></h3>
-      <form method="POST" action="/album">
+      <p><%= album.artist %></p>
+      <form method="POST" action="/users/albums">
         <input hidden value="<%= album.name %>" name="title">
         <input hidden value="<%= album.artist %>" artist="artist">
         <button type="submit">Add this album to your collection</button>

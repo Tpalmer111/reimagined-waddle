@@ -102,16 +102,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/')
 })
 
-router.get('/albums', (req, res) => {
-    res.render('users/albums.ejs')
-})
 
-
-//  /2.0/?method=album.search&album=believe&api_key=YOUR_API_KEY&format=json
-
-// router.get('/search', (req, res) => {
-//     res.render('users/search.ejs')
-// })
 router.get('/profile', (req, res) => {
     res.render('users/profile.ejs')
 })
@@ -119,39 +110,61 @@ router.get('/search', async (req, res) => {
     const search = req.query.albumSearch
     const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${search}&api_key=${process.env.API_KEY}&format=json`);
     // console.log(response.data.results.albummatches)
-    res.render('users/results.ejs', { albums: response.data.results.albummatches.album });
-  })
-  
+    res.render('users/results.ejs', { albums: response.data.results.albummatches.album});
+})
 
 
+router.get('/albums', async (req, res) => {
+try {
+    const allAlbums = await db.album.findAll({
+        where: {
+            userId: res.locals.user.id
+        }
+    })
+    res.render('users/albums.ejs', {allAlbums})
+} catch (err) {
+    console.log(err)
+    res.send('server error')
+}
+})
 
-//   router.get('/albums/:id', async (req, res) => {
-//     console.log(req.params.id)
-//     const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=${req.params.id}&api_key=${process.env.API_KEY}&format=json`);
-
-//     res.render('users/albums.ejs', { album: response.data })
-//   })
-  
-  router.get('/album', async (req, res) => {
+router.post('/albums', async (req, res) => {
     try {
-      const allFaves = await db.album.findAll()
-      res.render('users/albums.ejs', {allFaves})
-    } catch (err) {
-      console.log(err)
-      res.send('server error')
-    }
-  })
-  
-  router.post('/albums', async (req, res) => {
-    try {
-      console.log(req.body)
-      await db.album.create(req.body)
-      res.redirect('/profile')
+        // console.log(req.body.userId)
+        await db.album.create({
+            title: req.body.title,
+            artist: req.body.artist,
+            userId: res.locals.user.id
+        })
+        res.redirect('/users/albums')
     }catch (err) {
-      console.log(err)
-      res.send('server error')
+        console.log(err)
+        res.send('server error')
     }
-  })
+})
+
+
+
+
+
+
+
+
+
+
+// router.get('/albums', (req, res) => {
+//     res.render('users/albums.ejs')
+// })
+
+// router.get('/album', async (req, res) => {
+// try {
+//     const allFaves = await db.album.findAll()
+//     res.render('users/albums.ejs', {allFaves})
+// } catch (err) {
+//     console.log(err)
+//     res.send('server error')
+// }
+// })
 
 
 
