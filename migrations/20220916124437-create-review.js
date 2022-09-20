@@ -14,6 +14,9 @@ module.exports = {
       rating: {
         type: Sequelize.INTEGER
       },
+      albumId: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

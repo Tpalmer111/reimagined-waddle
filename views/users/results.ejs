@@ -5,8 +5,8 @@
       <p><%= album.artist %></p>
       <form method="POST" action="/users/albums">
         <input hidden value="<%= album.name %>" name="title">
-        <input hidden value="<%= album.artist %>" artist="artist">
-        <button type="submit">Add this album to your collection</button>
+        <input hidden value="<%= album.artist %>" name="artist">
+        <button type="submit">Add to collection</button>
       </form>
   </div>
 <% }) %>

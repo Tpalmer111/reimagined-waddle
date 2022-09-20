@@ -130,7 +130,6 @@ try {
 
 router.post('/albums', async (req, res) => {
     try {
-        // console.log(req.body.userId)
         await db.album.create({
             title: req.body.title,
             artist: req.body.artist,
@@ -160,9 +159,27 @@ router.delete('/albums/:id', async (req, res) => {
 })
 
 
-// router.get('/reviews', async (req, res => {
-//     res.send("request reviews of an album")
-// }))
+router.get('/reviews', async (req, res) => {
+    // res.send("hello review page")
+   
+    res.render('users/reviews.ejs')
+})
+
+router.post('/reviews', async (req, res) => {
+    console.warn(req.body.song)
+    console.warn(req.body.rating)
+    try {
+        await db.review.create({
+            song: req.body.song,
+            rating: req.body.rating,
+            albumId: res.locals.user.id
+        })
+        res.redirect('/users/reviews')
+    }catch(err) {
+        console.log(err)
+        res.send('server error')
+    }
+})
 
 
 

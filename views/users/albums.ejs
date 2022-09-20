@@ -2,16 +2,22 @@
 
 <% allAlbums.forEach(album => { %>
     <h2><%= album.title %></h2>
-    
+    <p><%= album.artist %></p> 
+
     <form method="POST" action="/users/albums">
         <input hidden value="<%= album.name %>" name="title">
-        <input hidden value="<%= album.artist %>" artist="artist">
-        <button type="submit">Reviews</button>
-      </form>
+        <input hidden value="<%= album.artist %>" name="artist">
+    </form>
+
+    <form method="GET" action="/users/reviews">
+        <input hidden value="<%= album.name %>" name="title">
+        <input hidden value="<%= album.artist %>" name="artist">
+        <button type="submit">favorite track</button>
+    </form>
 
 
     <form method="POST" action="/users/albums/<%= album.id %>?_method=DELETE">
         <input type="hidden" name="_method" value="delete">
         <input type="submit" value="Delete"/>
-      </form>
+    </form>
 <% }) %>
