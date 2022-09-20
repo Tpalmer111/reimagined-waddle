@@ -12,6 +12,7 @@
     <form method="GET" action="/users/reviews">
         <input hidden value="<%= album.name %>" name="title">
         <input hidden value="<%= album.artist %>" name="artist">
+        <input hidden value="<%= album.id %>" name="albumId">
         <button type="submit">favorite track</button>
     </form>
 

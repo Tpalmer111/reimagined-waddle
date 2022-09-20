@@ -144,7 +144,6 @@ router.post('/albums', async (req, res) => {
 
 router.delete('/albums/:id', async (req, res) => {
 
-
     try {
         await db.album.destroy({
             where: {
@@ -160,89 +159,24 @@ router.delete('/albums/:id', async (req, res) => {
 
 
 router.get('/reviews', async (req, res) => {
-    // res.send("hello review page")
-   
-    res.render('users/reviews.ejs')
-})
-
-router.post('/reviews', async (req, res) => {
-    console.warn(req.body.song)
-    console.warn(req.body.rating)
+    console.log(req.query)
     try {
-        await db.review.create({
-            song: req.body.song,
-            rating: req.body.rating,
-            albumId: res.locals.user.id
+        const album = await db.album.findByPk(req.query.albumId, {
+            include: [db.review]
         })
-        res.redirect('/users/reviews')
-    }catch(err) {
+        console.log(album)
+        res.render('users/reviews.ejs', {album: album})
+    } catch {
         console.log(err)
         res.send('server error')
     }
+
+
+
 })
 
 
 
-
-
-
-
-// router.get('/albums', (req, res) => {
-//     res.render('users/albums.ejs')
-// })
-
-// router.get('/album', async (req, res) => {
-// try {
-//     const allFaves = await db.album.findAll()
-//     res.render('users/albums.ejs', {allFaves})
-// } catch (err) {
-//     console.log(err)
-//     res.send('server error')
-// }
-// })
-
-
-
-
-
-
-
-
-// router.get('/comment', (req, res) => {
-//     res.render('users/comment.ejs')
-// })
-
-// router.get('/update', (req, res) => {
-//     res.render('users/update.ejs')
-// })
-
-// router.get('/albums/:id', (req, res) => {
-//     res.render('show album information: title, artist, etc.')
-// })
-
-// router.get('/albums/:id/comment', (req, res) => {
-//     res.render('show album comments')
-// })
-
-// router.post('/albums', (req, res) => {
-//     console.log('add this album to user profile')
-// })
-
-// router.post('/albums/:id/comment', (req, res) => {
-//     console.log('add this comment to this album')
-// })
-
-// router.put('/users', (req, res) => {
-//     console.log('update this user with this new email/password')
-// })
-
-// router.put('/comments/:id', (req, res) => {
-//     console.log('update this comment on this album')
-// })
-
-// router.delete('/albums/:id', (req, res) => {
-//     console.log('delete this album')
-// })
-
+//  LEFT OFF: figuring out how to populate the albumId column
 
 module.exports = router

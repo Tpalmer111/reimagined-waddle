@@ -49,6 +49,7 @@ app.get('/', (req, res) => {
 
 // Controllers
 app.use('/users', require('./controllers/users'))
+app.use('/albums', require('./controllers/albums'))
 
 // listen on a port
 app.listen(PORT, () => console.log(`Rockin and Rollin on port: ${PORT}`))

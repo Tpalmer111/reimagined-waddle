@@ -1,15 +1,16 @@
 <h1>Create new track note:</h1>
 
-<form method="POST" action="/users/reviews">
+
+
+<form method="POST" action="/albums/<%= album.id %>/reviews">
   <label for="song">Track title</label>
   <input type="text" id="song" name="song" />
-  <label for="rating">Track notes</label>
+  <label for="rating">Rating 1-10</label>
   <input type="text" id="rating" name="rating" />
 
   <input type="submit" />
 </form>
 
 
-
-<h3>track notes:</h3>
+<h3>Favorite tracks:</h3>
 
