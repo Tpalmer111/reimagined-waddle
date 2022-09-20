@@ -1,6 +1,7 @@
 // required packages
 require('dotenv').config()
 const express = require('express')
+const methodOverride = require('method-override')
 const ejsLayouts = require('express-ejs-layouts')
 const cookieParser = require('cookie-parser')
 const db = require('./models')
@@ -15,6 +16,7 @@ app.set('view engine', 'ejs')
 app.use(ejsLayouts)
 app.use(express.urlencoded({ extended: true}))
 app.use(cookieParser())
+app.use(methodOverride('_method'));
 // our custom auth middleware
 app.use(async (req, res, next) => {
     // console.log('hello from a middleware 👋')

@@ -144,10 +144,12 @@ router.post('/albums', async (req, res) => {
 })
 
 router.delete('/albums/:id', async (req, res) => {
+
+
     try {
         await db.album.destroy({
             where: {
-                id: req.params.body.id
+                id: req.params.id
             }
         })
         res.redirect('/users/albums')
@@ -158,7 +160,9 @@ router.delete('/albums/:id', async (req, res) => {
 })
 
 
-
+// router.get('/reviews', async (req, res => {
+//     res.send("request reviews of an album")
+// }))
 
 
 
