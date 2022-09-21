@@ -12,11 +12,13 @@ router.post('/:id/reviews', async (req, res) => {
             albumId: req.params.id
         })
         res.redirect('/users/reviews?albumId=' + req.params.id)
+
     }catch(err) {
         console.log(err)
         res.send('server error')
     }
 })
+
 
 
 module.exports = router

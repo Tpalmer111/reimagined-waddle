@@ -9,10 +9,10 @@
         <input hidden value="<%= album.artist %>" name="artist">
     </form>
 
-    <form method="GET" action="/users/reviews">
-        <input hidden value="<%= album.name %>" name="title">
+    <form method="GET" action="/users/reviews?albumId=<%=album.id%>">
+        <input hidden value="<%= album.title %>" name="title">
         <input hidden value="<%= album.artist %>" name="artist">
-        <input hidden value="<%= album.albumId %> " name="albumId">
+        <input hidden value="<%= album.id %> " name="albumId">
         <button type="submit">favorite track</button>
     </form>
 

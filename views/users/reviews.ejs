@@ -13,3 +13,7 @@
 <p>by: <%= album.artist %></p>
 <h3>Favorite tracks:</h3>
 
+<% reviews.forEach(review => { %>
+    <h2><%= review.song %></h2>
+    <p><%= review.rating %></p> 
+    <% }) %>

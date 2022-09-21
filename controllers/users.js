@@ -15,7 +15,6 @@ router.get('/new', (req, res) => {
 
 // POST /users -- create a new user in the db
 router.post('/', async (req, res) => {
-    console.warn("test 2")
     try {
 
         // has the password from the req.body
@@ -143,7 +142,6 @@ router.post('/albums', async (req, res) => {
 })
 
 router.delete('/albums/:id', async (req, res) => {
-
     try {
         await db.album.destroy({
             where: {
@@ -157,24 +155,42 @@ router.delete('/albums/:id', async (req, res) => {
     }
 })
 
-router.get('/reviews', async (req, res) => {
-    //console.log(req.query)
+// router.post('/reviews', async (req, res) => {
+//     try {
+        // const album = await db.album.findByPk(req.body.albumId, {
+        //     include: [db.review]
+        // })
+
+//         res.render('users/reviews.ejs', {album: album})
+//         } catch (err) {
+//             console.log(err)
+//             res.send('server error')
+//         }
+// })
+
+router.get("/reviews", async (req, res) => {
+    console.log(req.query.albumId)
     try {
+        const reviews = await db.review.findAll({
+            where: {
+                albumId: req.query.albumId
+            }
+        })
         const album = await db.album.findByPk(req.query.albumId, {
             include: [db.review]
         })
-        console.log(req.query)
-        const allReviews = await db.review.findAll({
-
-            where: {
-                albumId: req.query
-            }
-        })
-        res.render('users/reviews.ejs', {album: album}, {allReviews})
-    } catch (err) {
-        console.log(err)
-        res.send('server error')
-    }
+        res.render('users/reviews.ejs', {album: album, reviews: reviews})
+        } catch (err) {
+            console.log(err)
+            res.send('server error')
+        }
 })
+
+router.get('/update', async (req, res) => {
+    res.render('users/update.ejs')
+})
+
+// router.put('/users')
+
 
 module.exports = router
