@@ -146,7 +146,7 @@ router.get('/profile', (req, res) => {
 router.get('/search', async (req, res) => {
     const search = req.query.albumSearch
     const response = await axios.get(`http://ws.audioscrobbler.com/2.0/?method=album.search&album=${search}&api_key=${process.env.API_KEY}&format=json`);
-    // console.log(response.data.results.albummatches)
+    console.log(response.data.results.albummatches)
     res.render('users/results.ejs', { albums: response.data.results.albummatches.album});
 })
 
