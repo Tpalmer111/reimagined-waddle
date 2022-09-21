@@ -157,26 +157,24 @@ router.delete('/albums/:id', async (req, res) => {
     }
 })
 
-
 router.get('/reviews', async (req, res) => {
-    console.log(req.query)
+    //console.log(req.query)
     try {
         const album = await db.album.findByPk(req.query.albumId, {
             include: [db.review]
         })
-        console.log(album)
-        res.render('users/reviews.ejs', {album: album})
-    } catch {
+        console.log(req.query)
+        const allReviews = await db.review.findAll({
+
+            where: {
+                albumId: req.query
+            }
+        })
+        res.render('users/reviews.ejs', {album: album}, {allReviews})
+    } catch (err) {
         console.log(err)
         res.send('server error')
     }
-
-
-
 })
-
-
-
-//  LEFT OFF: figuring out how to populate the albumId column
 
 module.exports = router
