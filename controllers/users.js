@@ -99,30 +99,31 @@ router.get('/update', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
+  
           // hash the password from the req.body
           const hashedPassword = bcrypt.hashSync(req.body.password, 12)        
           // create a new user
-          console.log(req.params)
+          console.log(req.body.email)
           const [updateUser, updated] = await db.user.update({
-              where: {
-                  email: req.body.email
-              }, 
-              defaults: {
-                  password: hashedPassword
-              }
-          })
-          if (!updated) {
-            // console.log('update failed')
-            res.redirect('/users/login?message=Update failed.')
-        } else {
-            // store that new user's id as a cookie in the browser
-            const encryptedUserId = crypto.AES.encrypt(updateUser.id.toString(), process.env.ENC_SECRET)
-            const encryptedUserIdString = encryptedUserId.toString()
-            res.cookie('userId', encryptedUserIdString)
-            // redirect to the homepage
+              email: req.body.email,
+              password: hashedPassword
+            },
+              { where: {
+                  id: req.params.id
+                }
+            })
             res.redirect('/users/profile')
-        }
-
+    //      if (updated) {
+    //        //console.log('user info updated: ' + updateUser)
+    //        res.redirect('/users/update?message=Update failed.')
+    //    } else {
+    //         //store that new user's id as a cookie in the browser
+    //         const encryptedUserId = crypto.AES.encrypt(updateUser.id.toString(), process.env.ENC_SECRET)
+    //         const encryptedUserIdString = encryptedUserId.toString()
+    //         res.cookie('userId', encryptedUserIdString)
+    //          // redirect to the homepage
+    //         res.redirect('/users/profile')
+    //     }
     } catch(err) {
         console.log(err)
         res.send('server error')
