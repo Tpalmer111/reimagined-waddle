@@ -93,6 +93,43 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.get('/update', async (req, res) => {
+    res.render('users/update.ejs')
+})
+
+router.put('/:id', async (req, res) => {
+    try {
+          // hash the password from the req.body
+          const hashedPassword = bcrypt.hashSync(req.body.password, 12)        
+          // create a new user
+          console.log(req.params)
+          const [updateUser, updated] = await db.user.update({
+              where: {
+                  email: req.body.email
+              }, 
+              defaults: {
+                  password: hashedPassword
+              }
+          })
+          if (!updated) {
+            // console.log('update failed')
+            res.redirect('/users/login?message=Update failed.')
+        } else {
+            // store that new user's id as a cookie in the browser
+            const encryptedUserId = crypto.AES.encrypt(updateUser.id.toString(), process.env.ENC_SECRET)
+            const encryptedUserIdString = encryptedUserId.toString()
+            res.cookie('userId', encryptedUserIdString)
+            // redirect to the homepage
+            res.redirect('/users/profile')
+        }
+
+    } catch(err) {
+        console.log(err)
+        res.send('server error')
+    }
+})
+
+
 // GET /users/logout -- log out a user by clearing the stored cookie
 router.get('/logout', (req, res) => {
     // clear the cookie
@@ -155,18 +192,6 @@ router.delete('/albums/:id', async (req, res) => {
     }
 })
 
-// router.post('/reviews', async (req, res) => {
-//     try {
-        // const album = await db.album.findByPk(req.body.albumId, {
-        //     include: [db.review]
-        // })
-
-//         res.render('users/reviews.ejs', {album: album})
-//         } catch (err) {
-//             console.log(err)
-//             res.send('server error')
-//         }
-// })
 
 router.get("/reviews", async (req, res) => {
     console.log(req.query.albumId)
@@ -185,12 +210,6 @@ router.get("/reviews", async (req, res) => {
             res.send('server error')
         }
 })
-
-router.get('/update', async (req, res) => {
-    res.render('users/update.ejs')
-})
-
-// router.put('/users')
 
 
 module.exports = router

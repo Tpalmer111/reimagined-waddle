@@ -4,7 +4,8 @@
 
 
 
-<form action="/users" method="PUT">
+<form method="POST" action="/users/<%= user.id %>?_method=PUT">
+    <input type="hidden" name="_method" value="put">
     <label for="email">Email:</label>
     <input id="email" type="email" name="email" required>
 
