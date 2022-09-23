@@ -3,7 +3,7 @@
     <div>
       <h3>Title: <%= album.name %></h3>
       <p>Artist: <%= album.artist %></p>
-
+      <img src="<%= album.image[0] %>" />
       
       <form method="POST" action="/users/albums">
         <input hidden value="<%= album.name %>" name="title">

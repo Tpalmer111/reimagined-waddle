@@ -107,6 +107,37 @@ D    | DELETE | /albums/:id          | remove album from profile                
 
 
 
+## __Installation Instructions__
+
+To run Personal Discography App:
+
+1. Fork and clone this repository.
+
+2. In terminal, navigate to the cloned repository. Run the command:
+``` npm install``` 
+this will install all of the required dependency packages.
+
+3. Create a .gitignore file and a .env file. Run the command:
+```touch .gitignore .env``` 
+and type ```node_modules``` and ```.env``` into the .gitignore file.
+
+Then, in the .env file, type ```ENC_KEY='my secret'``` 
+
+4. Next, open a browser window and go to [last.Fm.com] (https://www.last.fm/api/) and sign up for an account and get an API_Key. They will also give you a second level of verification called a SHARED_SECRET, but that will not be required for this. Save you API-KEY somewhere you can find it easily.
+
+Then, in the .env file, type ```API_KEY=``` followed by the key you received from last.Fm.com. (Example: API_KEY=##############) 
+Replace the hashes with your API_KEY.
+
+5. Create a database on your local machine. In the terminal run the command:
+```createdb music_collection_database```
+
+then run the command:
+```sequelize db:migrate ```
+
+6. Then run the command ```nodemon``` to run the server.
+
+7. In your browser navigate to localhost.3000 to see the program.
+
 
 ### inspiration and developer notes
 
@@ -114,4 +145,4 @@ After a frustrating ordeal trying to decide on a project direction, I was procra
 
 ### post project reflection
 
-...
+Throughout the process of learning software engineering I have found many different aspects challenging. From the outset I assumed that the biggest challenges would be the knowledge I was trying to understand. This project really changed that mentality for me. I realized that the problem of how to learn, would always be there. Once something is understood, another quest for knowledge takes its place. But the shape of that learning needs to adapt. When I began to question what was different about the peers I compared myself to, I realized they simply asked questions, reached out for help, and sought advice. The part of myself that wants to solve everything alone is actually self-destructive. Then I realized that I am better when I let myself be a part of the community.
